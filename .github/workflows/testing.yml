@@ -44,7 +44,6 @@ jobs:
 
     - name: Run Zip Test
       run: |
-        cd golang
         go get golang.org/x/sys
         go get github.com/ebitengine/purego
-        go run main.go zippy.go
+        go run *.go
