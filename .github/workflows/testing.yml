@@ -42,8 +42,12 @@ jobs:
       run: |
         java --version
 
-    - name: Run Zip Test
+    - name: Go Build
       run: |
         go get golang.org/x/sys
         go get github.com/ebitengine/purego
-        go run *.go
+        go build -a -o . ./...
+
+    - name: Try a Zip Test
+      run: |
+        essayer
