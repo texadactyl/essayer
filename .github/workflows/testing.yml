@@ -50,4 +50,4 @@ jobs:
 
     - name: Try a Zip Test
       run: |
-        essayer
+        ./essayer
