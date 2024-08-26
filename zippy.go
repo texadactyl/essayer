@@ -1,16 +1,24 @@
 package main
 
 import (
-	"log"
 	"essayer/bridges"
+	"log"
 )
 
-func tryZip(zipLibPath string) {
+func tryZip() {
 
 	log.Println("tryZip: Begin")
 
-	//var handle uintptr
 	var err error
+	var zipLibPath string
+
+	// Form the zip library path.
+	if bridges.WindowsOS {
+		zipLibPath = bridges.DirLibs + bridges.PathStringSep + "zip." + bridges.LibExt
+	} else {
+		zipLibPath = bridges.DirLibs + bridges.PathStringSep + "libzip." + bridges.LibExt
+
+	}
 
 	// Open the zip library.
 	_ = bridges.ConnectLibrary(zipLibPath)
