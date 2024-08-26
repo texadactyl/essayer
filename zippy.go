@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"main/bridges"
 )
 
 func tryZip(zipLibPath string) {
@@ -12,7 +13,7 @@ func tryZip(zipLibPath string) {
 	var err error
 
 	// Open the zip library.
-	_ = connectLibrary(zipLibPath)
+	_ = bridges.ConnectLibrary(zipLibPath)
 	if err != nil {
 		log.Fatalf("tryZip: purego.Dlopen for [%s] failed, reason: [%s]\n", zipLibPath, err.Error())
 	}
