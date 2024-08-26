@@ -23,4 +23,4 @@ On all platforms, successfully opened the JVM library and then the ZIP library.
 Windows: What a royal pain in the hindquarters!
 * O/S differences (historical)
 * Java library subdirectory location (%JAVA_HOME%\bin on Windows vs ${JAVA_HOME}/lib on Posix)
-* Java library file name prefixes ("" on Windows vs "lib" on Posix E.g. zip.dll vs libzip.so)
+* Java library file name prefixes (nil on Windows vs "lib" on Posix E.g. zip.dll vs libzip.so)
