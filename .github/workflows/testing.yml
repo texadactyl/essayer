@@ -42,6 +42,11 @@ jobs:
       run: |
         java --version
 
+    - name: Find DLLs
+      if: runner.os == 'Windows'
+      run: |
+        DIR /S %JAVA_HOME%\bin\*.dll
+
     - name: Go Build
       run: |
         go get golang.org/x/sys
