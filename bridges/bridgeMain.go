@@ -40,8 +40,14 @@ func Setup() {
 	// Calculate the path of the Java lib directory.
 	DirLibs = javaHome + PathStringSep + "lib"
 
-	// Calculate the path of the server libjvm and open it.
-	LibJvm = DirLibs + PathStringSep + "server" + PathStringSep + "libjvm." + LibExt
+	// Calculate the path of the server libjvm.
+	if WindowsOS {
+		LibJvm = DirLibs + PathStringSep + "libjvm." + LibExt
+	} else {
+		LibJvm = DirLibs + PathStringSep + "server" + PathStringSep + "libjvm." + LibExt
+	}
+
+	// Connect to libjvm.
 	_ = ConnectLibrary(LibJvm)
 	log.Println("bridges/Setup: End")
 
