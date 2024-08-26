@@ -45,7 +45,7 @@ jobs:
     - name: Find DLLs
       if: runner.os == 'Windows'
       run: |
-        DIR /S %JAVA_HOME%\bin\*.dll
+        DIR/S %JAVA_HOME%\bin\*.dll
 
     - name: Go Build
       run: |
