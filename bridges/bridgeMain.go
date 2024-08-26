@@ -38,13 +38,13 @@ func Setup() {
 	}
 
 	// Calculate the path of the Java lib directory.
-	DirLibs = javaHome + PathStringSep + "lib"
-
-	// Calculate the path of the server libjvm.
+	// Calculate the path of the server JVM library.
 	if WindowsOS {
-		LibJvm = DirLibs + PathStringSep + "libjvm." + LibExt
+		DirLibs = javaHome + PathStringSep + "bin"
+		LibJvm = DirLibs + PathStringSep + "jvm." + LibExt
 	} else {
-		LibJvm = DirLibs + PathStringSep + "server" + PathStringSep + "libjvm." + LibExt
+		DirLibs = javaHome + PathStringSep + "lib"
+		LibJvm = DirLibs + PathStringSep + "libjvm." + LibExt
 	}
 
 	// Connect to libjvm.
