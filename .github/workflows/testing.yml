@@ -41,11 +41,12 @@ jobs:
     - name: Verify Java
       run: |
         java --version
+        echo Java home is %JAVA_HOME%
 
     - name: Find DLLs
       if: runner.os == 'Windows'
       run: |
-        DIR /s %JAVA_HOME%\bin\*.dll
+        DIR %JAVA_HOME%\bin\*.dll /s
 
     - name: Go Build
       run: |
