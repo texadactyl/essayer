@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"main/bridges"
+	"essayer/bridges"
 )
 
 func main() {
