@@ -26,6 +26,7 @@ Note: Variadic library functions (variable number of arguments) are not supporte
 **2024-08-26 14:00**
 
 On all platforms, successfully opened the JVM library and then the ZIP library.
+<br>
 Windows: What a royal pain in the hindquarters!
 * O/S differences (historical)
 * Java library subdirectory location (%JAVA_HOME%\bin on Windows vs ${JAVA_HOME}/lib on Posix)
