@@ -46,7 +46,6 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         $Env:JAVA_HOME
-        DIR %JAVA_HOME%\bin\*.dll /s
 
     - name: Go Build
       run: |
