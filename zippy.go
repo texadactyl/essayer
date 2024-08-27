@@ -51,13 +51,18 @@ func tryZip() {
 	log.Println("tryZip: purego.RegisterLibFunc ok")
 
 	// Data.
-	crc := uint32(0)                             // initial CRC value
+	observed := uint32(0)                        // initial CRC value
 	data := []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ") // Argument for CRC32
 	datalen := uint32(len(data))
+	expected := uint32(0xabf77822)
 
 	// Execute ZIP_CRC32().
-	crc = crc32UpdateFunc(crc, unsafe.Pointer(&data[0]), datalen)
-	log.Printf("tryZip: CRC32 = 0x%08x\n", crc)
+	observed = crc32UpdateFunc(observed, unsafe.Pointer(&data[0]), datalen)
+	if observed != expected {
+		log.Fatalf("tryZip: Oops, expected: 0x%08x, observed: 0x%08x\n", expected, observed)
+	} else {
+		log.Printf("tryZip: Success, observed = expected = 0x%08x\n", observed)
+	}
 
 	log.Println("tryZip: End")
 
