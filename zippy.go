@@ -35,17 +35,7 @@ func tryZip() {
 	}
 	log.Printf("tryZip: library connected for [%s] ok\n", zipLibPath)
 
-	/*
-		Java_java_util_zip_CRC32_update(JNIEnv *env, jclass cls, jint crc, jint b)
-		{
-			Bytef buf[1];
-
-			buf[0] = (Bytef)b;
-			return crc32(crc, buf, 1);
-		}
-	*/
-
-	// Register the library function.
+	// Register the ZIP_CRC32 library function.
 	var crc32UpdateFunc func(uint32, unsafe.Pointer, uint32) uint32
 	purego.RegisterLibFunc(&crc32UpdateFunc, libHandle, "ZIP_CRC32")
 	log.Println("tryZip: purego.RegisterLibFunc ok")
