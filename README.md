@@ -27,5 +27,5 @@ Windows: What a royal pain in the hindquarters!
 
 **2024-08-27**
 
-Computed ZIP_CRC32 on Linux. Checked results with https://crc32.online/
+Computed ZIP_CRC32 on all platforms. Checked results with https://crc32.online/
 
