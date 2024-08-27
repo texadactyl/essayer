@@ -27,5 +27,7 @@ Windows: What a royal pain in the hindquarters!
 
 **2024-08-27**
 
-Executed ZIP_CRC32 and Java_java_util_zip_CRC32_update successfully on all platforms. Checked results with https://crc32.online/
+Executed the following libzip functions successfully on all platforms. Checked results with https://crc32.online/ :
+* ZIP_CRC32
+* Java_java_util_zip_CRC32_update
 
