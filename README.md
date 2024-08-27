@@ -23,7 +23,7 @@ package main
 
 Note: Variadic library functions (variable number of arguments) are not supported.
 
-**2024-08-26 14:00**
+**2024-08-26**
 
 On all platforms, successfully opened the JVM library and then the ZIP library.
 <br>
@@ -31,3 +31,8 @@ Windows: What a royal pain in the hindquarters!
 * O/S differences (historical)
 * Java library subdirectory location (%JAVA_HOME%\bin on Windows vs ${JAVA_HOME}/lib on Posix)
 * Java library file ame prefixes ("" on Windows vs "lib" on Posix E.g. zip.dll vs libzip.so)
+
+**2024-08-27**
+
+Computed ZIP_CRC32 on Linux. Checked results with https://crc32.online/
+
