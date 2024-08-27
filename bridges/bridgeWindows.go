@@ -13,5 +13,5 @@ func ConnectLibrary(libPath string) windows.Handle {
 		log.Fatalf("ConnectLibrary: windows.LoadLibrary for [%s] failed, reason: [%s]\n",
 			libPath, err.Error())
 	}
-	return handle
+	return handle.(uinptr)
 }
