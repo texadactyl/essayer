@@ -1,8 +1,10 @@
 /*
-	Library source: src/java.base/share/native/libzip/CRC32.c
-	Include file directory: src/java.base/share/native/include/
+	Exercise some of the JVM libzip functions.
 
-	Chaecker: https://crc32.online/
+	Library source: src/java.base/share/native/libzip/CRC32.c
+	Library include file directory: src/java.base/share/native/include/
+
+	On-line checker: https://crc32.online/
 */
 
 package main
@@ -13,6 +15,29 @@ import (
 	"log"
 	"unsafe"
 )
+
+func try_ZIP_CRC32(libHandle uintptr) {
+
+	// Register the ZIP_CRC32 library function.
+	var crc32UpdateFunc func(uint32, unsafe.Pointer, uint32) uint32
+	purego.RegisterLibFunc(&crc32UpdateFunc, libHandle, "ZIP_CRC32")
+	log.Println("tryZip: purego.RegisterLibFunc ok")
+
+	// Data.
+	observed := uint32(0)                        // initial CRC value
+	data := []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ") // Argument for CRC32
+	datalen := uint32(len(data))
+	expected := uint32(0xabf77822)
+
+	// Execute ZIP_CRC32().
+	observed = crc32UpdateFunc(observed, unsafe.Pointer(&data[0]), datalen)
+	if observed != expected {
+		log.Fatalf("tryZip: Oops, expected: 0x%08x, observed: 0x%08x\n", expected, observed)
+	} else {
+		log.Printf("tryZip: Success, observed = expected = 0x%08x\n", observed)
+	}
+
+}
 
 func tryZip() {
 
@@ -35,24 +60,8 @@ func tryZip() {
 	}
 	log.Printf("tryZip: library connected for [%s] ok\n", zipLibPath)
 
-	// Register the ZIP_CRC32 library function.
-	var crc32UpdateFunc func(uint32, unsafe.Pointer, uint32) uint32
-	purego.RegisterLibFunc(&crc32UpdateFunc, libHandle, "ZIP_CRC32")
-	log.Println("tryZip: purego.RegisterLibFunc ok")
-
-	// Data.
-	observed := uint32(0)                        // initial CRC value
-	data := []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ") // Argument for CRC32
-	datalen := uint32(len(data))
-	expected := uint32(0xabf77822)
-
-	// Execute ZIP_CRC32().
-	observed = crc32UpdateFunc(observed, unsafe.Pointer(&data[0]), datalen)
-	if observed != expected {
-		log.Fatalf("tryZip: Oops, expected: 0x%08x, observed: 0x%08x\n", expected, observed)
-	} else {
-		log.Printf("tryZip: Success, observed = expected = 0x%08x\n", observed)
-	}
+	// Run individual tests.
+	try_ZIP_CRC32(libHandle)
 
 	log.Println("tryZip: End")
 
