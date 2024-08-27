@@ -42,7 +42,7 @@ jobs:
       run: |
         java --version
 
-    - name: Find DLLs
+    - name: Show Java Home on Windows
       if: runner.os == 'Windows'
       run: |
         $Env:JAVA_HOME
