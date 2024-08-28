@@ -1,10 +1,11 @@
 /*
-	Exercise some of the JVM libzip functions.
+	Exercise some of the JVM libzip CRC32 functions.
 
 	Library source: src/java.base/share/native/libzip/CRC32.c
 	Library include file directory: src/java.base/share/native/include/
 
-	On-line checker: https://crc32.online/
+	On-line checker for CRC32: https://crc32.online/
+
 */
 
 package main
@@ -22,7 +23,7 @@ func try_ZIP_CRC32(libHandle uintptr) {
 	funcName := "ZIP_CRC32"
 	var crc32UpdateFunc func(uint32, unsafe.Pointer, uint32) uint32
 	purego.RegisterLibFunc(&crc32UpdateFunc, libHandle, funcName)
-	log.Printf("tryZip: purego.RegisterLibFunc (%s) ok\n", funcName)
+	log.Printf("tryCrcMain: purego.RegisterLibFunc (%s) ok\n", funcName)
 
 	// Data.
 	observed := uint32(0)                        // initial CRC value
@@ -33,9 +34,9 @@ func try_ZIP_CRC32(libHandle uintptr) {
 	// Execute ZIP_CRC32().
 	observed = crc32UpdateFunc(observed, unsafe.Pointer(&data[0]), datalen)
 	if observed != expected {
-		log.Fatalf("tryZip: Oops, expected: 0x%08x, observed: 0x%08x\n", expected, observed)
+		log.Fatalf("tryCrcMain: Oops, expected: 0x%08x, observed: 0x%08x\n", expected, observed)
 	} else {
-		log.Printf("tryZip: Success, observed = expected = 0x%08x\n", observed)
+		log.Printf("tryCrcMain: Success, observed = expected = 0x%08x\n", observed)
 	}
 
 }
@@ -46,7 +47,7 @@ func try_Java_java_util_zip_CRC32_update(libHandle uintptr) {
 	funcName := "Java_java_util_zip_CRC32_update"
 	var crc32UpdateFunc func(unsafe.Pointer, unsafe.Pointer, uint32, uint32) uint32
 	purego.RegisterLibFunc(&crc32UpdateFunc, libHandle, funcName)
-	log.Printf("tryZip: purego.RegisterLibFunc (%s) ok\n", funcName)
+	log.Printf("tryCrcMain: purego.RegisterLibFunc (%s) ok\n", funcName)
 
 	// Data.
 	observed := uint32(0) // initial CRC value
@@ -58,16 +59,16 @@ func try_Java_java_util_zip_CRC32_update(libHandle uintptr) {
 	// Execute ZIP_CRC32().
 	observed = crc32UpdateFunc(dummyPtr, dummyPtr, observed, data)
 	if observed != expected {
-		log.Fatalf("tryZip: Oops, expected: 0x%08x, observed: 0x%08x\n", expected, observed)
+		log.Fatalf("tryCrcMain: Oops, expected: 0x%08x, observed: 0x%08x\n", expected, observed)
 	} else {
-		log.Printf("tryZip: Success, observed = expected = 0x%08x\n", observed)
+		log.Printf("tryCrcMain: Success, observed = expected = 0x%08x\n", observed)
 	}
 
 }
 
-func tryZip() {
+func tryCrcMain() {
 
-	log.Println("tryZip: Begin")
+	log.Println("tryCrcMain: Begin")
 
 	var err error
 	var zipLibPath string
@@ -82,14 +83,14 @@ func tryZip() {
 	// Open the zip library.
 	libHandle := bridges.ConnectLibrary(zipLibPath)
 	if err != nil {
-		log.Fatalf("tryZip: purego.Dlopen for [%s] failed, reason: [%s]\n", zipLibPath, err.Error())
+		log.Fatalf("tryCrcMain: purego.Dlopen for [%s] failed, reason: [%s]\n", zipLibPath, err.Error())
 	}
-	log.Printf("tryZip: library connected for [%s] ok\n", zipLibPath)
+	log.Printf("tryCrcMain: library connected for [%s] ok\n", zipLibPath)
 
 	// Run individual tests.
 	try_ZIP_CRC32(libHandle)
 	try_Java_java_util_zip_CRC32_update(libHandle)
 
-	log.Println("tryZip: End")
+	log.Println("tryCrcMain: End")
 
 }
