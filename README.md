@@ -53,4 +53,4 @@ Some observations of the libzip code:
     typedef float           jfloat;    // float32
     typedef double          jdouble;   // float64 assuming 64-bit architecture
 ```
-* The JNI environment is required for several functions (E.g. Java_java_util_zip_Deflater_deflateBytesBytes) just to execute; a dummy pointer cannot be used.
+* The JNI environment is required for several functions (E.g. Java_java_util_zip_Deflater_deflateBytesBytes) just to execute; a dummy pointer cannot be used. Each JNI environment belongs to a unique JVM thread.
