@@ -35,7 +35,7 @@ Executed the following libzip functions successfully on all platforms. Checked r
 
 Working on zip deflate and inflate.
 Some observations of the libzip code:
-* The environment pointer is used for throwing exceptions. I haven't yet run into a function that uses the object pointer. Yet.
+* The environment pointer is used for throwing exceptions. Maybe other uses? I haven't yet run into a function that uses the object pointer. Yet.
 * In general,
 <br>- Very little comments (mostly, none) in the source code.
 <br>- Symbol definitions are all over the place and, generally, without comments, of course. Pardon my sarcasm.
