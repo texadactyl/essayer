@@ -31,3 +31,7 @@ Executed the following libzip functions successfully on all platforms. Checked r
 * ZIP_CRC32
 * Java_java_util_zip_CRC32_update
 
+**2024-08-28**
+
+Working on zip defalte and inflate.
+
