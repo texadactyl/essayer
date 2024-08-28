@@ -43,7 +43,7 @@ Some observations of the libzip code:
 * My assumption is that the jacobin Go code wrapper for natives will be fed all required parameter values on the stack and they must match up to the requested function's definition in our native table (TBD).
 * Extract from src/java.base/{unix,windows}/native/include/jni_md.h
 ```
-    typedef int jint;                  // int64 assuming 64-bit
+    typedef int jint;                  // int64 assuming 64-bit architecture
 ```
 * Extract from src/java.base/share/native/include/jni.h:
 ```
@@ -51,5 +51,5 @@ Some observations of the libzip code:
     typedef unsigned short  jchar;     // uint16
     typedef short           jshort;    // int16
     typedef float           jfloat;    // float32
-    typedef double          jdouble;   // float64 assuming 64-bit
+    typedef double          jdouble;   // float64 assuming 64-bit architecture
 ```
