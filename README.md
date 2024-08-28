@@ -51,5 +51,5 @@ Some observations of the libzip code:
     typedef unsigned short  jchar;     // uint16
     typedef short           jshort;    // int16
     typedef float           jfloat;    // float32
-    typedef double          jdouble;   // float64
+    typedef double          jdouble;   // float64 assuming 64-bit
 ```
