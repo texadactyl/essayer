@@ -33,5 +33,5 @@ Executed the following libzip functions successfully on all platforms. Checked r
 
 **2024-08-28**
 
-Working on zip defalte and inflate.
+Working on zip deflate and inflate.
 
