@@ -45,8 +45,8 @@ func tryDeflater(libHandle uintptr, inBytes []byte) []byte {
 	dummyPtr := unsafe.Pointer(&dummyData)
 
 	// Initialise deflater.
-	streamPtr := deflaterInit(dummyPtr, dummyPtr, level, strategy, noWrap)
-	if streamPtr == uint64(0) {
+	streamAddr := deflaterInit(dummyPtr, dummyPtr, level, strategy, noWrap)
+	if streamAddr == uint64(0) {
 		log.Fatalln("tryDeflater: Oops, deflaterInit failed")
 	} else {
 		log.Println("tryDeflater: deflaterInit ok")
