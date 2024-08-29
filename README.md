@@ -58,3 +58,8 @@ Some observations of the libzip code:
     typedef double          jdouble;   // float64 assuming 64-bit architecture
 ```
 * The JNI environment is required for several functions (E.g. Java_java_util_zip_Deflater_deflateBytesBytes) just to execute; a dummy pointer cannot be used. Each JNI environment belongs to a unique JVM thread.
+
+**2024-08-29**
+
+100% in Go: Successfully created a JVM on the fly and got a handle for the JNI environment. AttachThread seems to be unnecessary.
+
