@@ -61,5 +61,6 @@ Some observations of the libzip code:
 
 **2024-08-29**
 
-100% in Go: Successfully created a JVM on the fly and got a handle for the JNI environment. AttachThread seems to be unnecessary.
+100% in Go on Ubuntu and MacOS: Successfully created a JVM on the fly and got a handle for the JNI environment. AttachThread seems to be unnecessary.
+Windows failed unexplainably.
 
