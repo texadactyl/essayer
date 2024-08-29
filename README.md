@@ -34,6 +34,8 @@ Executed the following libzip functions successfully on all platforms. Checked r
 **2024-08-28**
 
 Working on zip deflate and inflate.
+Success with ```deflaterInit```. That is because this function makes no use of the JNI environment in the normal case.
+
 Some observations of the libzip code:
 * The environment pointer is used for throwing exceptions. Maybe other uses? I haven't yet run into a function that uses the object pointer. Yet.
 * In general,
