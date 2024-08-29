@@ -30,6 +30,7 @@ Windows: What a royal pain in the hindquarters!
 Executed the following libzip functions successfully on all platforms. Checked results with https://crc32.online/ :
 * ZIP_CRC32
 * Java_java_util_zip_CRC32_update
+
 Note that these functions make no use of the JNI environment in the normal case.
 
 **2024-08-28**
