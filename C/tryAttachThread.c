@@ -2,38 +2,39 @@
 #include <pthread.h>
 #include <stdio.h>
 
-// Global variable to hold the JavaVM reference
+// JVM reference.
 JavaVM *jvm = NULL;
 
 // Function that the native thread will execute
 void* thread_routine(void* arg) {
-    JNIEnv *env = NULL;
+    JNIEnv *env = NULL; // Set by AttachCurrentThread
+    char *className = "java/lang/String";
 
-    // Attach the current thread to the JVM
+    // Attach the current thread to the JVM.
     if ((*jvm)->AttachCurrentThread(jvm, (void**)&env, NULL) != 0) {
-        printf("Failed to attach thread to the JVM\n");
+        printf("*** Oops, thread_routine: Failed to attach thread to the JVM\n");
         return NULL;
     }
-
-    // Now you can use the JNIEnv pointer to interact with the JVM
     printf("Thread successfully attached to the JVM\n");
 
-    // For example, find a Java class and call a method (simplified)
-    jclass cls = (*env)->FindClass(env, "java/lang/String");
-    if (cls != NULL) {
-        printf("Found java/lang/String class\n");
-    } else {
-        printf("Failed to find java/lang/String class\n");
+    // Find a Java class by calling a function through an environment vector.
+    jclass cls = (*env)->FindClass(env, className);
+    if (cls == NULL) {
+        printf("*** Oops, thread_routine: Failed to find class %s\n", className);
+        return NULL;
     }
-
+    printf("thread_routine: Found class %s\n", className);
+    
     // Detach the thread before exiting
     (*jvm)->DetachCurrentThread(jvm);
 
-    printf("Thread successfully detached from the JVM\n");
+    printf("thread_routine: Thread successfully detached from the JVM\n");
     return NULL;
 }
 
 int main() {
+    printf("main: Begin\n");
+
     // Normally, JVM creation is handled by the Java launcher, but here’s an example:
     JavaVMInitArgs vm_args;
     JavaVMOption options[1];
@@ -46,23 +47,25 @@ int main() {
     // Create the JVM
     JNIEnv *env; // Add this line to define env
     if (JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args) < 0) {
-        printf("Failed to create JVM\n");
+        printf("*** Oops, main: Failed to create JVM\n");
         return 1;
     }
 
-    // Create a native thread
+    // Create a native thread.
     pthread_t thread;
     if (pthread_create(&thread, NULL, thread_routine, NULL) != 0) {
-        printf("Failed to create native thread\n");
+        printf("*** Oops, main: Failed to create native thread\n");
         return 1;
     }
 
-    // Wait for the thread to finish
+    // Wait for the thread to finish.
     pthread_join(thread, NULL);
 
-    // Destroy the JVM (optional, usually not done until program exit)
+    // Destroy the JVM (unnecessary in the case of this sample code).
     (*jvm)->DestroyJavaVM(jvm);
 
+    printf("main: End\n");
+    
     return 0;
 }
 
