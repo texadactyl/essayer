@@ -31,9 +31,13 @@ Executed the following libzip functions successfully on all platforms. Checked r
 * ZIP_CRC32
 * Java_java_util_zip_CRC32_update
 
+Note that these functions make no use of the JNI environment in the normal case.
+
 **2024-08-28**
 
 Working on zip deflate and inflate.
+Success with ```deflaterInit```. That is because this function makes no use of the JNI environment in the normal case.
+
 Some observations of the libzip code:
 * The environment pointer is used for throwing exceptions. Maybe other uses? I haven't yet run into a function that uses the object pointer. Yet.
 * In general,
