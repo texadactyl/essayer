@@ -62,34 +62,30 @@ func tryZipMain() {
 	log.Println("tryCrcMain: Begin")
 
 	var err error
-	var zipLibPath string
+	var pathZip string
 
 	// Form the zip library path.
 	if bridges.WindowsOS {
-		zipLibPath = bridges.DirLibs + bridges.PathStringSep + "zip." + bridges.LibExt
+		pathZip = bridges.PathDirLibs + bridges.SepPathString + "zip." + bridges.FileExt
 	} else {
-		zipLibPath = bridges.DirLibs + bridges.PathStringSep + "libzip." + bridges.LibExt
+		pathZip = bridges.PathDirLibs + bridges.SepPathString + "libzip." + bridges.FileExt
 	}
 
 	// Open the zip library.
-	libHandle := bridges.ConnectLibrary(zipLibPath)
+	handleZip := bridges.ConnectLibrary(pathZip)
 	if err != nil {
-		log.Fatalf("tryCrcMain: purego.Dlopen for [%s] failed, reason: [%s]\n", zipLibPath, err.Error())
+		log.Fatalf("tryZipMain: purego.Dlopen for [%s] failed, reason: [%s]\n", pathZip, err.Error())
 	}
-	log.Printf("tryCrcMain: library connected for [%s] ok\n", zipLibPath)
-
-	// Run individual CRC tests.
-	try_ZIP_CRC32(libHandle)
-	try_Java_java_util_zip_CRC32_update(libHandle)
+	log.Printf("tryZipMain: library connected for [%s] ok\n", pathZip)
 
 	// Deflater test.
 	rawData := []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ") // Inflated raw data
 	rawDatalen := uint32(len(rawData))
 	crunchedData := make([]byte, rawDatalen)
 
-	crunchedData = tryDeflater(libHandle, rawData)
+	crunchedData = tryDeflater(handleZip, rawData)
 	fmt.Printf("DEBUG tryDeflater returned %s\n", string(crunchedData))
 
-	log.Println("tryCrcMain: End")
+	log.Println("tryZipMain: End")
 
 }

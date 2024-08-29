@@ -71,25 +71,25 @@ func tryCrcMain() {
 	log.Println("tryCrcMain: Begin")
 
 	var err error
-	var zipLibPath string
+	var pathZip string
 
 	// Form the zip library path.
 	if bridges.WindowsOS {
-		zipLibPath = bridges.DirLibs + bridges.PathStringSep + "zip." + bridges.LibExt
+		pathZip = bridges.PathDirLibs + bridges.SepPathString + "zip." + bridges.FileExt
 	} else {
-		zipLibPath = bridges.DirLibs + bridges.PathStringSep + "libzip." + bridges.LibExt
+		pathZip = bridges.PathDirLibs + bridges.SepPathString + "libzip." + bridges.FileExt
 	}
 
 	// Open the zip library.
-	libHandle := bridges.ConnectLibrary(zipLibPath)
+	handleZip := bridges.ConnectLibrary(pathZip)
 	if err != nil {
-		log.Fatalf("tryCrcMain: purego.Dlopen for [%s] failed, reason: [%s]\n", zipLibPath, err.Error())
+		log.Fatalf("tryCrcMain: purego.Dlopen for [%s] failed, reason: [%s]\n", pathZip, err.Error())
 	}
-	log.Printf("tryCrcMain: library connected for [%s] ok\n", zipLibPath)
+	log.Printf("tryCrcMain: library connected for [%s] ok\n", pathZip)
 
 	// Run individual tests.
-	try_ZIP_CRC32(libHandle)
-	try_Java_java_util_zip_CRC32_update(libHandle)
+	try_ZIP_CRC32(handleZip)
+	try_Java_java_util_zip_CRC32_update(handleZip)
 
 	log.Println("tryCrcMain: End")
 
