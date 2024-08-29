@@ -35,7 +35,6 @@ void* thread_routine(void* arg) {
 int main() {
     printf("main: Begin\n");
 
-    // Normally, JVM creation is handled by the Java launcher, but here’s an example:
     JavaVMInitArgs vm_args;
     JavaVMOption options[1];
     options[0].optionString = "-Djava.class.path=.";
@@ -44,7 +43,7 @@ int main() {
     vm_args.options = options;
     vm_args.ignoreUnrecognized = 0;
 
-    // Create the JVM
+    // Create the JVM.
     JNIEnv *env; // Add this line to define env
     if (JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args) < 0) {
         printf("*** Oops, main: Failed to create JVM\n");
