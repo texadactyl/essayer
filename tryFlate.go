@@ -23,37 +23,86 @@ package main
 
 import (
 	"essayer/bridges"
-	"fmt"
 	"github.com/ebitengine/purego"
 	"log"
-	"unsafe"
 )
 
-func tryDeflater(libHandle uintptr, inBytes []byte) []byte {
+func tryDeflater(libHandle uintptr, inBytes bridges.JNIbyteArray) bridges.JNIbyteArray {
+
+	var streamAddr bridges.JNIlong
+	tempBytes := make(bridges.JNIbyteArray, len(inBytes))
+	var dummyClassData bridges.JNIclassType
+	dummyClassPtr := &dummyClassData
+
+	// -------------------------------------------------------------------------------------------
+	// JNIEXPORT jlong JNICALL
+	//Java_java_util_zip_Deflater_init(JNIEnv *env, jclass cls, jint level,
+	//                                 jint strategy, jboolean nowrap)
+	funcName := "Java_java_util_zip_Deflater_init"
+	var deflaterInit func(uintptr, bridges.JNIclassPtr, bridges.JNIint, bridges.JNIint, bridges.JNIboolean) bridges.JNIlong
 
 	// Register the Java_java_util_zip_Deflater_init library function.
-	funcName := "Java_java_util_zip_Deflater_init"
-	var deflaterInit func(unsafe.Pointer, unsafe.Pointer, uint32, uint32, uint8) uint64
 	purego.RegisterLibFunc(&deflaterInit, libHandle, funcName)
 	log.Printf("tryDeflater: purego.RegisterLibFunc (%s) ok\n", funcName)
 
-	// Data.
-	level := uint32(9)    // best compression
-	strategy := uint32(0) // default strategy
-	noWrap := uint8(0)    // false
-	dummyData := 0
-	dummyPtr := unsafe.Pointer(&dummyData)
+	// Data for deflaterInit.
+	level := bridges.JNIint(9)      // best compression
+	strategy := bridges.JNIint(0)   // default strategy
+	noWrap := bridges.JNIboolean(0) // false
 
-	// Initialise deflater.
-	streamAddr := deflaterInit(dummyPtr, dummyPtr, level, strategy, noWrap)
-	if streamAddr == uint64(0) {
-		log.Fatalln("tryDeflater: Oops, deflaterInit failed")
+	// Call deflaterInit.
+	streamAddr = deflaterInit(bridges.HandleENV, dummyClassPtr, level, strategy, noWrap)
+	if streamAddr == bridges.JNIlong(0) {
+		log.Fatalf("tryDeflater: Oops, %s failed\n", funcName)
 	} else {
-		log.Println("tryDeflater: deflaterInit ok")
+		log.Printf("tryDeflater: %s ok\n", funcName)
 	}
 
+	// -------------------------------------------------------------------------------------------
+	// JNIEXPORT jlong JNICALL
+	// Java_java_util_zip_Deflater_deflateBytesBytes(JNIEnv *env, jobject this, jlong addr,
+	//                                         jbyteArray inputArray, jint inputOff, jint inputLen,
+	//                                         jbyteArray outputArray, jint outputOff, jint outputLen,
+	//                                         jint flush, jint params)
+	funcName = "Java_java_util_zip_Deflater_deflateBytesBytes"
+	var deflaterBytesToBytes func(uintptr, bridges.JNIclassPtr, bridges.JNIlong,
+		bridges.JNIbyteArray, bridges.JNIint, bridges.JNIint,
+		bridges.JNIbyteArray, bridges.JNIint, bridges.JNIint,
+		bridges.JNIint, bridges.JNIint) bridges.JNIlong
+
+	// Register the Java_java_util_zip_Deflater_end library function.
+	purego.RegisterLibFunc(&deflaterBytesToBytes, libHandle, funcName)
+	log.Printf("tryDeflater: purego.RegisterLibFunc (%s) ok\n", funcName)
+
+	// Call deflaterEnd.
+	sizeDeflated := deflaterBytesToBytes(bridges.HandleENV, dummyClassPtr, streamAddr,
+		inBytes, bridges.JNIint(0), bridges.JNIint(len(inBytes)),
+		tempBytes, bridges.JNIint(0), bridges.JNIint(len(tempBytes)),
+		bridges.JNIint(0), bridges.JNIint(0))
+	if sizeDeflated < 1 {
+		log.Fatalf("tryDeflater: Oops, %s failed\n", funcName)
+	} else {
+		log.Printf("tryDeflater: %s ok\n", funcName)
+	}
+
+	// -------------------------------------------------------------------------------------------
+	// JNIEXPORT void JNICALL Java_java_util_zip_Deflater_end(JNIEnv *env, jclass cls, jlong addr)
+	funcName = "Java_java_util_zip_Deflater_end"
+	var deflaterEnd func(uintptr, bridges.JNIclassPtr, bridges.JNIlong)
+
+	// Register the Java_java_util_zip_Deflater_end library function.
+	purego.RegisterLibFunc(&deflaterEnd, libHandle, funcName)
+	log.Printf("tryDeflater: purego.RegisterLibFunc (%s) ok\n", funcName)
+
+	// Call deflaterEnd.
+	deflaterEnd(bridges.HandleENV, dummyClassPtr, streamAddr)
+	log.Printf("tryDeflater: %s ok\n", funcName)
+
+	// -------------------------------------------------------------------------------------------
 	// Return output.
-	return inBytes
+	outBytes := make(bridges.JNIbyteArray, sizeDeflated)
+	_ = copy(outBytes, tempBytes[:sizeDeflated])
+	return outBytes
 
 }
 
@@ -61,7 +110,6 @@ func tryFlateMain() {
 
 	log.Println("tryCrcMain: Begin")
 
-	var err error
 	var pathZip string
 
 	// Form the zip library path.
@@ -73,18 +121,13 @@ func tryFlateMain() {
 
 	// Open the zip library.
 	handleZip := bridges.ConnectLibrary(pathZip)
-	if err != nil {
-		log.Fatalf("tryFlateMain: purego.Dlopen for [%s] failed, reason: [%s]\n", pathZip, err.Error())
-	}
 	log.Printf("tryFlateMain: library connected for [%s] ok\n", pathZip)
 
 	// Deflater test.
-	rawData := []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ") // Inflated raw data
-	rawDatalen := uint32(len(rawData))
-	crunchedData := make([]byte, rawDatalen)
-
-	crunchedData = tryDeflater(handleZip, rawData)
-	fmt.Printf("DEBUG tryDeflater returned %s\n", string(crunchedData))
+	inflatedData := bridges.JNIbyteArray("ABCDEFGHIJKLMNOPQRSTUVWXYZ") // Inflated raw data
+	log.Printf("tryFlateMain: Calling tryDeflater with %d inflated bytes\n", len(inflatedData))
+	deflatedData := tryDeflater(handleZip, inflatedData)
+	log.Printf("tryFlateMain: tryDeflater returned %d deflated bytes\n", len(deflatedData))
 
 	log.Println("tryFlateMain: End")
 

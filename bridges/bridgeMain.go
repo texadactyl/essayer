@@ -14,6 +14,10 @@ type JNIlong int64
 type JNIshort int16
 type JNIfloat float32
 type JNIdouble float64
+type JNIbyteArray []byte
+
+type JNIclassType struct{ zero uint64 }
+type JNIclassPtr *JNIclassType
 
 // Needed for CreateJvm.
 type t_JavaVMInitArgs struct {
