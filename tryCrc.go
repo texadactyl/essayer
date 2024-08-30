@@ -19,9 +19,11 @@ import (
 
 func try_ZIP_CRC32(libHandle uintptr) {
 
-	// Register the ZIP_CRC32 library function.
+	// JNIEXPORT jint ZIP_CRC32(jint crc, const jbyte *buf, jint len)
 	funcName := "ZIP_CRC32"
 	var crc32UpdateFunc func(uint32, unsafe.Pointer, uint32) uint32
+
+	// Register the ZIP_CRC32 library function.
 	purego.RegisterLibFunc(&crc32UpdateFunc, libHandle, funcName)
 	log.Printf("tryCrcMain: purego.RegisterLibFunc (%s) ok\n", funcName)
 
@@ -43,9 +45,11 @@ func try_ZIP_CRC32(libHandle uintptr) {
 
 func try_Java_java_util_zip_CRC32_update(libHandle uintptr) {
 
-	// Register the ZIP_CRC32 library function.
+	// JNIEXPORT jint JNICALL Java_java_util_zip_CRC32_update(JNIEnv *env, jclass cls, jint crc, jint b)
 	funcName := "Java_java_util_zip_CRC32_update"
-	var crc32UpdateFunc func(unsafe.Pointer, unsafe.Pointer, uint32, uint32) uint32
+	var crc32UpdateFunc func(uintptr, unsafe.Pointer, uint32, uint32) uint32
+
+	// Register the ZIP_CRC32 library function.
 	purego.RegisterLibFunc(&crc32UpdateFunc, libHandle, funcName)
 	log.Printf("tryCrcMain: purego.RegisterLibFunc (%s) ok\n", funcName)
 
@@ -57,7 +61,7 @@ func try_Java_java_util_zip_CRC32_update(libHandle uintptr) {
 	dummyPtr := unsafe.Pointer(&dummyData)
 
 	// Execute ZIP_CRC32().
-	observed = crc32UpdateFunc(dummyPtr, dummyPtr, observed, data)
+	observed = crc32UpdateFunc(bridges.HandleENV, dummyPtr, observed, data)
 	if observed != expected {
 		log.Fatalf("tryCrcMain: Oops, expected: 0x%08x, observed: 0x%08x\n", expected, observed)
 	} else {

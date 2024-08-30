@@ -57,7 +57,7 @@ func tryDeflater(libHandle uintptr, inBytes []byte) []byte {
 
 }
 
-func tryZipMain() {
+func tryFlateMain() {
 
 	log.Println("tryCrcMain: Begin")
 
@@ -74,9 +74,9 @@ func tryZipMain() {
 	// Open the zip library.
 	handleZip := bridges.ConnectLibrary(pathZip)
 	if err != nil {
-		log.Fatalf("tryZipMain: purego.Dlopen for [%s] failed, reason: [%s]\n", pathZip, err.Error())
+		log.Fatalf("tryFlateMain: purego.Dlopen for [%s] failed, reason: [%s]\n", pathZip, err.Error())
 	}
-	log.Printf("tryZipMain: library connected for [%s] ok\n", pathZip)
+	log.Printf("tryFlateMain: library connected for [%s] ok\n", pathZip)
 
 	// Deflater test.
 	rawData := []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ") // Inflated raw data
@@ -86,6 +86,6 @@ func tryZipMain() {
 	crunchedData = tryDeflater(handleZip, rawData)
 	fmt.Printf("DEBUG tryDeflater returned %s\n", string(crunchedData))
 
-	log.Println("tryZipMain: End")
+	log.Println("tryFlateMain: End")
 
 }

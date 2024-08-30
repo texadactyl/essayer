@@ -9,5 +9,5 @@ func main() {
 	bridges.Setup()
 	tryCrcMain()
 	log.Print("main: Bye-bye")
-	tryZipMain()
+	tryFlateMain()
 }
