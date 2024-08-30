@@ -15,5 +15,5 @@ func ConnectLibrary(libPath string) uintptr {
 		log.Fatalf("ConnectLibrary: purego.Dlopen for [%s] failed, reason: [%s]\n",
 			libPath, err.Error())
 	}
-	return uintptr(handle)
+	return handle
 }
