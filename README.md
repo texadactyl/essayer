@@ -66,7 +66,7 @@ Windows failed unexplainably.
 
 **2024-09-02**
 
-Lessons Learned
+#### Lessons Learned
 
 * The JVM and JNI are intimately intertwined. I doubt if we can successfully use JNI functions without creating a JVM by calling ```JNI_CreateJavaVM```.
 * Each thread that calls JNI functions must have its own JNI environment. 
@@ -77,7 +77,7 @@ Lessons Learned
 * As far as I can see, Go cannot execute functions expressed as vectors in the JNI environment. So, we seem to be at an impass.
 * I am having trouble imagining a table-driven approach used by a JNI wrapper function called by the INVOKE* run.go opcode cases. Too many things can go sideways between the wrapper and the native library functions.
 
-Tribute to the JVM JNI Testers
+#### Tribute to the JVM JNI Testers
 
 Given the complexity of the JVM / JNI code relationships, the way definitions are strewn all over the source code, and the consistent lack of comments, the fact that the JVM JNI functions work well for a number of years is a tribute to those people who have spent significant time testing the JVM JNI relationships. Well done!
 
