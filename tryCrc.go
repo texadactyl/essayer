@@ -34,7 +34,7 @@ func try_ZIP_CRC32(libHandle uintptr) {
 	expected := uint32(0xabf77822)
 
 	// Execute ZIP_CRC32().
-	observed = crc32UpdateFunc(observed, data, datalen)
+	observed = crc32UpdateFunc(observed, bridges.JNIbyteArray(&data[0]), datalen)
 	if uint32(observed) != expected {
 		log.Fatalf("tryCrcMain: Oops, expected: 0x%08x, observed: 0x%08x\n", expected, observed)
 	} else {

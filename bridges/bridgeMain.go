@@ -5,19 +5,20 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"unsafe"
 )
 
-type JNIboolean uint8
-type JNIchar uint16
-type JNIint int32
-type JNIlong int64
-type JNIshort int16
-type JNIfloat float32
-type JNIdouble float64
-type JNIbyteArray []byte
-
-type JNIclassType struct{ zero uint64 }
-type JNIclassPtr *JNIclassType
+type (
+	JNIboolean   uint8
+	JNIchar      uint16
+	JNIint       int32
+	JNIlong      int64
+	JNIshort     int16
+	JNIfloat     float32
+	JNIdouble    float64
+	JNIbyteArray unsafe.Pointer
+	JNIobject    unsafe.Pointer
+)
 
 // Needed for CreateJvm.
 type t_JavaVMInitArgs struct {
@@ -86,12 +87,14 @@ func Setup() {
 
 	// Register the JVM creator library function.
 	funcName := "JNI_CreateJavaVM"
+	var JvmEnv uintptr
 	var createJvm func(*uintptr, *uintptr, *t_JavaVMInitArgs) JNIint // (& ptr to JVM, & ptr to env, & arguments) returns JNIint
 	purego.RegisterLibFunc(&createJvm, HandleLibjvm, funcName)
 	log.Printf("bridges/Setup: purego.RegisterLibFunc (%s) ok\n", funcName)
 
 	// Create the JVM.
-	ret := createJvm(&HandleJVM, &HandleENV, &JavaVMInitArgs)
+
+	ret := createJvm(&HandleJVM, &JvmEnv, &JavaVMInitArgs)
 	if ret < 0 {
 		log.Fatalln("bridges/Setup: Cannot create a JVM. Exiting.")
 	}
