@@ -68,7 +68,7 @@ Windows failed unexplainably.
 
 Lessons Learned
 
-* The JVM and JNI are intimately intertwined. 
+* The JVM and JNI are intimately intertwined. I doubt if we can successfully use JNI functions without creating a JVM without calling ```JNI_CreateJavaVM```.
 * Each thread that calls JNI functions must have its own JNI environment. 
 * Trying to run a C program inside the same thread as the JVM seems to always lead to a crash.
 * Java_java_util_zip_Deflater_deflateBytesBytes will not work without using the JNI environment utility functions. See ```essayer/C``` for examples. That one doesn't crash although the resulting output length makes no sense. 
