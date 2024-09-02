@@ -71,6 +71,7 @@ Lessons Learned
 * The JVM and JNI are intimately intertwined. I doubt if we can successfully use JNI functions without creating a JVM by calling ```JNI_CreateJavaVM```.
 * Each thread that calls JNI functions must have its own JNI environment. 
 * Trying to run a C program inside the same thread as the JVM seems to always lead to a crash.
+* We have gotten several JNI library functions to work. They need no real reference to an object and they do not use arrays or objects as parameters.
 * Java_java_util_zip_Deflater_deflateBytesBytes will not work without using the JNI environment utility functions. See ```essayer/C``` for examples. That one doesn't crash although the resulting output length makes no sense. 
 * The above statements are most likely true for the Go version of a Java_java_util_zip_Deflater_deflateBytesBytes caller. 
 * As far as I can see, Go cannot execute functions expressed as vectors in the JNI environment. We seem to be at an impass.
