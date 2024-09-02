@@ -71,9 +71,13 @@ Lessons Learned
 * The JVM and JNI are intimately intertwined. I doubt if we can successfully use JNI functions without creating a JVM by calling ```JNI_CreateJavaVM```.
 * Each thread that calls JNI functions must have its own JNI environment. 
 * Trying to run a C program inside the same thread as the JVM seems to always lead to a crash.
-* We have gotten several JNI library functions to work. They need no real reference to an object and they do not use arrays or objects as parameters.
-* Java_java_util_zip_Deflater_deflateBytesBytes will not work without using the JNI environment utility functions. See ```essayer/C``` for examples. That one doesn't crash although the resulting output length makes no sense. 
-* The above statements are most likely true for the Go version of a Java_java_util_zip_Deflater_deflateBytesBytes caller. 
-* As far as I can see, Go cannot execute functions expressed as vectors in the JNI environment. We seem to be at an impass.
-* Given the complexity of the JVM / JNI code relationships, the way definitions are strewn all over, and the consistent lack of comments, the fact that the JVM works well is a tribute to those people who have spent significant time testing the JVM.
+* We have gotten several JNI library functions to work. They need no real reference to an object and they do not use arrays or objects as parameters. E.g. CRC32 functions work perfectly when called from Go.
+* From Java's libzip, ```Java_java_util_zip_Deflater_deflateBytesBytes``` will not work without using the JNI environment utility functions. See ```essayer/C``` for C-language examples. That particular one doesn't crash although the resulting output length makes no sense. No help from chatGPT.
+* I believe that there are dozens of functions that have characteristics similar to ```Java_java_util_zip_Deflater_deflateBytesBytes``` (array parametrs, object parameters).
+* As far as I can see, Go cannot execute functions expressed as vectors in the JNI environment. So, we seem to be at an impass.
+* I am having trouble imagining a table-driven approach used by a JNI wrapper function called by the INVOKE* run.go opcode cases. Too many things can go sideways between the wrapper and the native library functions.
+
+Tribute to the JVM JNI Testers
+
+Given the complexity of the JVM / JNI code relationships, the way definitions are strewn all over the source code, and the consistent lack of comments, the fact that the JVM JNI functions work well for a number of years is a tribute to those people who have spent significant time testing the JVM JNI relationships. Well done!
 
