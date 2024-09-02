@@ -79,5 +79,5 @@ Windows failed unexplainably.
 
 #### Tribute to the JVM JNI Testers
 
-Given the complexity of the JVM / JNI code relationships, the way definitions are strewn all over the source code, and the consistent lack of comments, the fact that the JVM JNI functions work well for a number of years is a tribute to those people who have spent significant time testing the JVM JNI relationships. Well done!
+Given the complexity of the JVM / JNI code relationships, the way definitions are strewn all over the source code, and the consistent lack of comments, the fact that the JVM JNI functions have been working very well for a number of years is a tribute to those people who have spent significant time testing the JVM JNI relationships. Well done!
 
